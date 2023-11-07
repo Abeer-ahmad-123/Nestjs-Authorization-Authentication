@@ -13,7 +13,18 @@ export class AuthenticationController {
 
   @HttpCode(HttpStatus.OK) // by default @Post does 201, we wanted 200 - hence using @HttpCode(HttpStatus.OK)
   @Post('sign-in')
-  signIn(@Body() signInDto: SignInDto) {
+  async signIn(
+    // @Res({ passthrough: true }) response: Response,
+    @Body() signInDto: SignInDto,
+  ) {
     return this.authService.signIn(signInDto);
+
+    //set token in cookies
+    // const accessToken = await this.authService.signIn(signInDto);
+    // response.cookie('accessToken', accessToken, {
+    //   secure: true,
+    //   httpOnly: true,
+    //   sameSite: true,
+    // });
   }
 }
