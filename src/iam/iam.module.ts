@@ -1,8 +1,17 @@
 import { Module } from '@nestjs/common';
-import { HasingService } from './hashing/hashing.service';
+import { HashingService } from './hashing/hashing.service';
 import { BcryptService } from './hashing/bcrypt.service';
+import { AuthenticationController } from './authentication/authentication.controller';
+import { AuthenticationService } from './authentication/authentication.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from 'src/users/entities/user.entity';
 
 @Module({
-  providers: [{ provide: HasingService, useClass: BcryptService }],
+  imports: [TypeOrmModule.forFeature([User])], //made user repo available to authentication service
+  providers: [
+    { provide: HashingService, useClass: BcryptService },
+    AuthenticationService,
+  ],
+  controllers: [AuthenticationController],
 })
 export class IamModule {}
